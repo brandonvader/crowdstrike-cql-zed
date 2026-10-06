@@ -1,0 +1,23 @@
+{
+  "name": "tree-sitter-crowdstrike-cql",
+  "version": "0.1.0",
+  "description": "CrowdStrike Query Language (CQL / LogScale) grammar for tree-sitter",
+  "scripts": {
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test",
+    "parse-corpus": "tree-sitter parse -q -s ../examples/*.logscale"
+  },
+  "keywords": [
+    "tree-sitter",
+    "crowdstrike",
+    "logscale",
+    "cql",
+    "ngsiem"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "tree-sitter-cli": "^0.27.0"
+  }
+}

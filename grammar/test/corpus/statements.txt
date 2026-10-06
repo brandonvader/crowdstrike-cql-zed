@@ -1,0 +1,244 @@
+============================================================
+Case statement
+============================================================
+
+case { x=1 | y := "a" ; * }
+
+---
+
+(source_file
+  (pipeline
+    (case_statement
+      (case_branch
+        (comparison
+          field: (identifier)
+          value: (number))
+        (assignment
+          left: (identifier)
+          right: (string
+            (string_content))))
+      (case_branch
+        (free_text
+          (wildcard))))))
+
+============================================================
+Match statement
+============================================================
+
+x match { /^e/i => a := 1 ; in(values=["a"]) => * ; "lit" => b := 2 ; * => drop(x) }
+
+---
+
+(source_file
+  (pipeline
+    (match_statement
+      field: (identifier)
+      (match_arm
+        guard: (regex
+          pattern: (regex_pattern)
+          flags: (regex_flags))
+        body: (pipeline
+          (assignment
+            left: (identifier)
+            right: (number))))
+      (match_arm
+        guard: (function_call
+          name: (function_name
+            (identifier))
+          arguments: (argument_list
+            (named_argument
+              name: (argument_name
+                (identifier))
+              value: (array
+                (string
+                  (string_content))))))
+        body: (pipeline
+          (free_text
+            (wildcard))))
+      (match_arm
+        guard: (string
+          (string_content))
+        body: (pipeline
+          (assignment
+            left: (identifier)
+            right: (number))))
+      (match_arm
+        guard: (wildcard)
+        body: (pipeline
+          (function_call
+            name: (function_name
+              (identifier))
+            arguments: (argument_list
+              (identifier))))))))
+
+============================================================
+match() as a function
+============================================================
+
+match(file="a.csv", field=foo[0].bar, include=[c])
+
+---
+
+(source_file
+  (pipeline
+    (function_call
+      name: (function_name
+        (identifier))
+      arguments: (argument_list
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (string
+            (string_content)))
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (identifier))
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (array
+            (identifier)))))))
+
+============================================================
+Correlate with labels and attributes
+============================================================
+
+correlate(
+  A: { #e=1 } include: [*],
+  B: { #e=2 | u <=> A.u },
+  sequence=false, within=5m)
+
+---
+
+(source_file
+  (pipeline
+    (function_call
+      name: (function_name
+        (identifier))
+      arguments: (argument_list
+        (attributed_expression
+          (subquery
+            label: (label)
+            (pipeline
+              (comparison
+                field: (identifier)
+                value: (number))))
+          attribute: (attribute_name)
+          (array
+            (wildcard)))
+        (subquery
+          label: (label)
+          (pipeline
+            (comparison
+              field: (identifier)
+              value: (number))
+            (comparison
+              field: (identifier)
+              value: (identifier))))
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (boolean))
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (duration))))))
+
+============================================================
+Saved queries and macros
+============================================================
+
+$"My Query"(host="x") | $q() | $parser://pkg/scope:p()
+
+---
+
+(source_file
+  (pipeline
+    (saved_query
+      name: (saved_query_name)
+      (named_argument
+        name: (argument_name
+          (identifier))
+        value: (string
+          (string_content))))
+    (saved_query
+      name: (saved_query_name))
+    (saved_query
+      name: (saved_query_name))))
+
+============================================================
+Query parameters
+============================================================
+
+f = ?param | g := ?"Quoted P" | ?{h="*"}
+
+---
+
+(source_file
+  (pipeline
+    (comparison
+      field: (identifier)
+      value: (parameter
+        name: (parameter_name)))
+    (assignment
+      left: (identifier)
+      right: (parameter
+        name: (parameter_name
+          (string_content))))
+    (free_text
+      (parameter
+        name: (parameter_name)
+        default: (string
+          (string_content))))))
+
+============================================================
+defineTable and join
+============================================================
+
+defineTable(name="t", query={#e=1 | groupBy(aid)}, include=[aid]) | match(table="t", field=aid)
+
+---
+
+(source_file
+  (pipeline
+    (function_call
+      name: (function_name
+        (identifier))
+      arguments: (argument_list
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (string
+            (string_content)))
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (subquery
+            (pipeline
+              (comparison
+                field: (identifier)
+                value: (number))
+              (function_call
+                name: (function_name
+                  (identifier))
+                arguments: (argument_list
+                  (identifier))))))
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (array
+            (identifier)))))
+    (function_call
+      name: (function_name
+        (identifier))
+      arguments: (argument_list
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (string
+            (string_content)))
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (identifier))))))

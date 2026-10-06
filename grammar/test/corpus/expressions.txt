@@ -1,0 +1,262 @@
+============================================================
+Quirk: division in eval, not a regex
+============================================================
+
+a:=m/fisk/i
+
+---
+
+(source_file
+  (pipeline
+    (assignment
+      left: (identifier)
+      right: (binary_expression
+        left: (binary_expression
+          left: (identifier)
+          right: (identifier))
+        right: (identifier)))))
+
+============================================================
+Arithmetic precedence and unary
+============================================================
+
+x := a * b / 2 - -c
+
+---
+
+(source_file
+  (pipeline
+    (assignment
+      left: (identifier)
+      right: (binary_expression
+        left: (binary_expression
+          left: (binary_expression
+            left: (identifier)
+            right: (identifier))
+          right: (number))
+        right: (unary_expression
+          operand: (identifier))))))
+
+============================================================
+Assignment without spaces
+============================================================
+
+foo:=bar | foo := bar
+
+---
+
+(source_file
+  (pipeline
+    (assignment
+      left: (identifier)
+      right: (identifier))
+    (assignment
+      left: (identifier)
+      right: (identifier))))
+
+============================================================
+Pipe-less consecutive assignments
+============================================================
+
+x := 2
+exp := 3
+| math:pow(field=x, exponent=exp, as=result)
+
+---
+
+(source_file
+  (pipeline
+    (assignment
+      left: (identifier)
+      right: (number))
+    (assignment
+      left: (identifier)
+      right: (number))
+    (function_call
+      name: (function_name
+        (namespaced_identifier))
+      arguments: (argument_list
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (identifier))
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (identifier))
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (identifier))))))
+
+============================================================
+Field shorthand, negated
+============================================================
+
+l =~ !in(values=["E"]) | ip =~ cidr(subnet="10.0.0.0/8")
+
+---
+
+(source_file
+  (pipeline
+    (field_shorthand
+      field: (identifier)
+      function: (function_call
+        name: (function_name
+          (identifier))
+        arguments: (argument_list
+          (named_argument
+            name: (argument_name
+              (identifier))
+            value: (array
+              (string
+                (string_content)))))))
+    (field_shorthand
+      field: (identifier)
+      function: (function_call
+        name: (function_name
+          (identifier))
+        arguments: (argument_list
+          (named_argument
+            name: (argument_name
+              (identifier))
+            value: (string
+              (string_content))))))))
+
+============================================================
+Durations, numbers, IPs
+============================================================
+
+bucket(span=5m) | reverseDns(ip, server=8.8.8.8) | x := 1.5e3
+
+---
+
+(source_file
+  (pipeline
+    (function_call
+      name: (function_name
+        (identifier))
+      arguments: (argument_list
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (duration))))
+    (function_call
+      name: (function_name
+        (identifier))
+      arguments: (argument_list
+        (identifier)
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (number))))
+    (assignment
+      left: (identifier)
+      right: (number))))
+
+============================================================
+Array field names
+============================================================
+
+array:contains("x[]", value="a") | objectArray:exists(foo[].bar, var=x, condition=test(x == "baz")) | y := foo[0].bar
+
+---
+
+(source_file
+  (pipeline
+    (function_call
+      name: (function_name
+        (namespaced_identifier))
+      arguments: (argument_list
+        (string
+          (string_content))
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (string
+            (string_content)))))
+    (function_call
+      name: (function_name
+        (namespaced_identifier))
+      arguments: (argument_list
+        (identifier)
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (identifier))
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (function_call
+            name: (function_name
+              (identifier))
+            arguments: (argument_list
+              (binary_expression
+                left: (identifier)
+                right: (string
+                  (string_content))))))))
+    (assignment
+      left: (identifier)
+      right: (identifier))))
+
+============================================================
+Stats shorthand
+============================================================
+
+[count(), max(x, as=m)]
+
+---
+
+(source_file
+  (pipeline
+    (stats_shorthand
+      (array
+        (function_call
+          name: (function_name
+            (identifier)))
+        (function_call
+          name: (function_name
+            (identifier))
+          arguments: (argument_list
+            (identifier)
+            (named_argument
+              name: (argument_name
+                (identifier))
+              value: (identifier))))))))
+
+============================================================
+Nested aggregations with subquery
+============================================================
+
+groupBy([aid, ComputerName], function=[count(as=n), {id=42 | $"My Saved Query"()}])
+
+---
+
+(source_file
+  (pipeline
+    (function_call
+      name: (function_name
+        (identifier))
+      arguments: (argument_list
+        (array
+          (identifier)
+          (identifier))
+        (named_argument
+          name: (argument_name
+            (identifier))
+          value: (array
+            (function_call
+              name: (function_name
+                (identifier))
+              arguments: (argument_list
+                (named_argument
+                  name: (argument_name
+                    (identifier))
+                  value: (identifier))))
+            (subquery
+              (pipeline
+                (comparison
+                  field: (identifier)
+                  value: (number))
+                (saved_query
+                  name: (saved_query_name))))))))))

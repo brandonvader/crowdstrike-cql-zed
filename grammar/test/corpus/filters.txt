@@ -1,0 +1,247 @@
+============================================================
+Implicit AND and OR precedence (OR binds tighter)
+============================================================
+
+a OR b c
+
+---
+
+(source_file
+  (pipeline
+    (and_filter
+      left: (or_filter
+        left: (free_text
+          (identifier))
+        (or)
+        right: (free_text
+          (identifier)))
+      right: (free_text
+        (identifier)))))
+
+============================================================
+NOT, field existence
+============================================================
+
+NOT foo=bar or baz != *
+
+---
+
+(source_file
+  (pipeline
+    (or_filter
+      left: (not_filter
+        (not)
+        operand: (comparison
+          field: (identifier)
+          value: (identifier)))
+      (or)
+      right: (comparison
+        field: (identifier)
+        value: (wildcard)))))
+
+============================================================
+Tag and special fields
+============================================================
+
+#event_simpleName=ProcessRollup2 @timestamp > 10 aid=?aid
+
+---
+
+(source_file
+  (pipeline
+    (and_filter
+      left: (and_filter
+        left: (comparison
+          field: (identifier)
+          value: (identifier))
+        right: (comparison
+          field: (identifier)
+          value: (number)))
+      right: (comparison
+        field: (identifier)
+        value: (parameter
+          name: (parameter_name))))))
+
+============================================================
+Unquoted patterns with slashes, dashes, backslashes
+============================================================
+
+repo.name=docker/* host=web-01 path=C:\\Windows\\*.exe
+
+---
+
+(source_file
+  (pipeline
+    (and_filter
+      left: (and_filter
+        left: (comparison
+          field: (identifier)
+          value: (unquoted_pattern))
+        right: (comparison
+          field: (identifier)
+          value: (unquoted_pattern)))
+      right: (comparison
+        field: (identifier)
+        value: (unquoted_pattern)))))
+
+============================================================
+URL as free text
+============================================================
+
+https://www.example.com/
+
+---
+
+(source_file
+  (pipeline
+    (free_text
+      (unquoted_pattern))))
+
+============================================================
+Quirk: slashes in filter value are a pattern
+============================================================
+
+foo=m/fisk/i
+
+---
+
+(source_file
+  (pipeline
+    (comparison
+      field: (identifier)
+      value: (unquoted_pattern))))
+
+============================================================
+Regex literal with flags
+============================================================
+
+ImageFileName=/\\cmd\.exe$/i
+
+---
+
+(source_file
+  (pipeline
+    (comparison
+      field: (identifier)
+      value: (regex
+        pattern: (regex_pattern)
+        flags: (regex_flags)))))
+
+============================================================
+Free-text regex with named group
+============================================================
+
+/disk_free=(?<space>[0-9]+)/ | space < 1000
+
+---
+
+(source_file
+  (pipeline
+    (free_text
+      (regex
+        pattern: (regex_pattern)))
+    (comparison
+      field: (identifier)
+      value: (number))))
+
+============================================================
+like operator and quoted field
+============================================================
+
+class like "Bucket" | "my field" = "x"
+
+---
+
+(source_file
+  (pipeline
+    (comparison
+      field: (identifier)
+      value: (string
+        (string_content)))
+    (comparison
+      field: (string
+        (string_content))
+      value: (string
+        (string_content)))))
+
+============================================================
+Negated function filter
+============================================================
+
+not in(x, values=[1,2]) | !cidr(ip, subnet="10.0.0.0/8")
+
+---
+
+(source_file
+  (pipeline
+    (not_filter
+      (not)
+      operand: (function_call
+        name: (function_name
+          (identifier))
+        arguments: (argument_list
+          (identifier)
+          (named_argument
+            name: (argument_name
+              (identifier))
+            value: (array
+              (number)
+              (number))))))
+    (not_filter
+      operand: (function_call
+        name: (function_name
+          (identifier))
+        arguments: (argument_list
+          (identifier)
+          (named_argument
+            name: (argument_name
+              (identifier))
+            value: (string
+              (string_content))))))))
+
+============================================================
+Function call as comparison value
+============================================================
+
+event.OperationName = in(values=["a","b"])
+
+---
+
+(source_file
+  (pipeline
+    (comparison
+      field: (identifier)
+      value: (function_call
+        name: (function_name
+          (identifier))
+        arguments: (argument_list
+          (named_argument
+            name: (argument_name
+              (identifier))
+            value: (array
+              (string
+                (string_content))
+              (string
+                (string_content)))))))))
+
+============================================================
+Comments
+============================================================
+
+// leading
+#repo=x /* block
+comment */ | count() // trailing
+
+---
+
+(source_file
+  (line_comment)
+  (pipeline
+    (comparison
+      field: (identifier)
+      value: (identifier))
+    (block_comment)
+    (function_call
+      name: (function_name
+        (identifier))))
+  (line_comment))

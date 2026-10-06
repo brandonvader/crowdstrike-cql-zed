@@ -1,0 +1,10 @@
+node_modules/
+grammar/build/
+grammar/*.wasm
+grammar.wasm
+*.so
+*.dylib
+/grammars/
+/target/
+extension.wasm
+.hl.py

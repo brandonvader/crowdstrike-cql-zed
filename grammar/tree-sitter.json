@@ -1,0 +1,18 @@
+{
+  "grammars": [
+    {
+      "name": "crowdstrike_cql",
+      "camelcase": "CrowdstrikeCql",
+      "scope": "source.cql",
+      "path": ".",
+      "file-types": ["logscale", "ngsiem", "lql"],
+      "highlights": "queries/highlights.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "CrowdStrike Query Language (CQL / LogScale) grammar for tree-sitter",
+    "links": { "repository": "" }
+  }
+}
