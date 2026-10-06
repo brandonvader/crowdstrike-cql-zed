@@ -1,6 +1,7 @@
 /**
  * @file Tree-sitter grammar for the CrowdStrike Query Language (CQL / LogScale)
- * @license MIT
+ * @license GPL-3.0-only
+ * Copyright (C) 2026 Brandon Vader
  *
  * Based on the published grammar subset:
  *   https://library.humio.com/lql-grammar/syntax-grammar-guide-subset.html

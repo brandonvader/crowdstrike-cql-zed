@@ -14,10 +14,15 @@
     "cql",
     "ngsiem"
   ],
-  "author": "",
-  "license": "MIT",
+  "author": "Brandon Vader <brandon@thetechpirate.net>",
+  "license": "GPL-3.0-only",
   "type": "commonjs",
   "devDependencies": {
     "tree-sitter-cli": "^0.27.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brandonvader/crowdstrike-cql-zed.git",
+    "directory": "grammar"
   }
 }

@@ -2,9 +2,9 @@ id = "crowdstrike-cql"
 name = "CrowdStrike Query Language (CQL)"
 version = "0.1.0"
 schema_version = 1
-authors = ["Brandon <brandon@thetechpirate.net>"]
+authors = ["Brandon Vader <brandon@thetechpirate.net>"]
 description = "CrowdStrike Query Language (CQL / LogScale / NG-SIEM) support: syntax highlighting, outline, brackets, indentation and snippets."
-repository = "https://github.com/OWNER/crwdcql_zed"
+repository = "https://github.com/brandonvader/crowdstrike-cql-zed"
 snippets = ["./snippets/crowdstrike cql.json"]
 
 # The grammar lives in ./grammar of this same repository.

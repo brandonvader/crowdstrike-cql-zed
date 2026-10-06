@@ -1,4 +1,4 @@
-# CrowdStrike Query Language (CQL) for Zed
+# CrowdStrike CQL for Zed
 
 Zed language support for the **CrowdStrike Query Language** (CQL, formerly
 LogScale Query Language / Humio), as used in Falcon NG-SIEM and LogScale.
@@ -106,4 +106,8 @@ npx tree-sitter query ../languages/cql/highlights.scm ../examples/sample.logscal
 
 ## License
 
-MIT
+Copyright (C) 2026 Brandon Vader
+
+Licensed under the GNU General Public License v3.0 (GPL-3.0-only); see
+[`LICENSE`](LICENSE). Anyone who distributes a modified version must release
+its source under the same license.

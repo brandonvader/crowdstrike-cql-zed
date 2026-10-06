@@ -5,14 +5,26 @@
       "camelcase": "CrowdstrikeCql",
       "scope": "source.cql",
       "path": ".",
-      "file-types": ["logscale", "ngsiem", "lql"],
+      "file-types": [
+        "logscale",
+        "ngsiem",
+        "lql"
+      ],
       "highlights": "queries/highlights.scm"
     }
   ],
   "metadata": {
     "version": "0.1.0",
-    "license": "MIT",
+    "license": "GPL-3.0-only",
     "description": "CrowdStrike Query Language (CQL / LogScale) grammar for tree-sitter",
-    "links": { "repository": "" }
+    "links": {
+      "repository": "https://github.com/brandonvader/crowdstrike-cql-zed"
+    },
+    "authors": [
+      {
+        "name": "Brandon Vader",
+        "email": "brandon@thetechpirate.net"
+      }
+    ]
   }
 }
