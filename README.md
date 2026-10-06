@@ -87,9 +87,9 @@ npx tree-sitter parse ../examples/sample.logscale
 Install in Zed: command palette → **zed: install dev extension** → select this
 directory. Check `zed: open log` for grammar build errors.
 
-**Important:** Zed builds the grammar from the git commit in
+**Important:** Zed builds the grammar from the git commit (fetched from GitHub) in
 `extension.toml` → `[grammars.crowdstrike_cql].rev`, not from your working
-tree. After changing the grammar: commit, update `rev` to the new commit SHA,
+tree. After changing the grammar: commit and push, update `rev` to the new SHA,
 then rebuild the dev extension in Zed's Extensions page.
 
 Query files live in `languages/cql/` and are read straight from disk; they
