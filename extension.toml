@@ -1,5 +1,5 @@
 id = "crowdstrike-cql"
-name = "CrowdStrike CQL for Zed"
+name = "CrowdStrike CQL"
 version = "0.1.0"
 schema_version = 1
 authors = ["Brandon Vader <brandon@thetechpirate.net>"]

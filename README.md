@@ -87,6 +87,13 @@ npx tree-sitter parse ../examples/sample.logscale
 Install in Zed: command palette → **zed: install dev extension** → select this
 directory. Check `zed: open log` for grammar build errors.
 
+Validate snippets (Zed treats every unescaped `$` as a tab stop, so regex
+anchors must be written `\\$`):
+
+```sh
+python3 grammar/scripts/check-snippets.py
+```
+
 **Important:** Zed builds the grammar from the git commit (fetched from GitHub) in
 `extension.toml` → `[grammars.crowdstrike_cql].rev`, not from your working
 tree. After changing the grammar: commit and push, update `rev` to the new SHA,

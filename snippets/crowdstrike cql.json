@@ -3,7 +3,7 @@
     "prefix": "proc",
     "body": [
       "#event_simpleName=ProcessRollup2 event_platform=${1|Win,Mac,Lin|}",
-      "| ImageFileName=/\\\\\\\\${2:powershell}\\.exe$/i",
+      "| ImageFileName=/\\\\\\\\${2:powershell}\\.exe\\$/i",
       "| table([@timestamp, aid, ComputerName, UserName, ImageFileName, CommandLine], limit=${3:1000})"
     ],
     "description": "Falcon ProcessRollup2 hunt by image name"
