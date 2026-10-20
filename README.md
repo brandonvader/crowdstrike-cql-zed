@@ -13,6 +13,32 @@ LogScale Query Language / Humio), as used in Falcon NG-SIEM and LogScale.
 > "file_types": { "CrowdStrike CQL": ["cql"] }
 > ```
 
+## Installation
+
+Until the extension is available in Zed's Extensions page, install it from a
+release archive as a dev extension.
+
+1. Download `crowdstrike-cql-zed-vX.Y.Z.zip` from the
+   [latest release](https://github.com/brandonvader/crowdstrike-cql-zed/releases/latest).
+2. Unzip it somewhere permanent (Zed reads the extension from that folder, so
+   don't delete it afterwards).
+3. In Zed, open the command palette and run **zed: install dev extension**,
+   then select the unzipped `crowdstrike-cql-zed-vX.Y.Z` folder.
+
+```sh
+# Example (Linux/macOS)
+curl -LO https://github.com/brandonvader/crowdstrike-cql-zed/releases/latest/download/crowdstrike-cql-zed-v0.1.0.zip
+unzip crowdstrike-cql-zed-v0.1.0.zip -d ~/zed-extensions
+```
+
+Notes:
+
+- An internet connection is needed on first install: Zed fetches and compiles
+  the tree-sitter grammar from this repository at the commit pinned in
+  `extension.toml`. Check `zed: open log` if highlighting doesn't appear.
+- To upgrade, unzip the new release and install it the same way (remove the
+  old dev extension first from the Extensions page if Zed reports a conflict).
+
 ## Features
 
 - **Syntax highlighting** that follows CQL semantics:
