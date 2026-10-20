@@ -25,12 +25,6 @@ release archive as a dev extension.
 3. In Zed, open the command palette and run **zed: install dev extension**,
    then select the unzipped `crowdstrike-cql-zed-vX.Y.Z` folder.
 
-```sh
-# Example (Linux/macOS)
-curl -LO https://github.com/brandonvader/crowdstrike-cql-zed/releases/latest/download/crowdstrike-cql-zed-v0.1.0.zip
-unzip crowdstrike-cql-zed-v0.1.0.zip -d ~/zed-extensions
-```
-
 Notes:
 
 - An internet connection is needed on first install: Zed fetches and compiles
